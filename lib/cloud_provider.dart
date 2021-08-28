@@ -29,15 +29,16 @@ class CloudProviderPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: kSpacing),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: kProviders.map((asset) {
-                return Expanded(
-                  child: _CloudProviderButton(
-                    asset: asset,
-                    onPressed: () =>
-                        Navigator.of(context).pushNamed(Routes.slideShow),
+              children: [
+                for (var i = 0; i < kProviders.length; ++i)
+                  Expanded(
+                    child: _CloudProviderButton(
+                      asset: kProviders[i],
+                      onPressed: () => Navigator.of(context)
+                          .pushNamed(Routes.slideShow, arguments: i),
+                    ),
                   ),
-                );
-              }).toList(),
+              ],
             ),
           ),
           const SizedBox(height: kSpacing),

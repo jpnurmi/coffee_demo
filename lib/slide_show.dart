@@ -17,8 +17,8 @@ class SlideShowPage extends StatefulWidget {
 }
 
 class _SlideShowPageState extends State<SlideShowPage> {
-  final _controller = PageController();
-  var _current = 0;
+  PageController? _controller;
+  int? _current;
   Timer? _timer;
 
   void _restartTimer() {
@@ -33,16 +33,24 @@ class _SlideShowPageState extends State<SlideShowPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    _current = ModalRoute.of(context)!.settings.arguments as int;
+    _controller?.dispose();
+    _controller = PageController(initialPage: _current!);
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   void _next() {
-    if (_current < kSlides.length - 1) {
+    if (_current! < kSlides.length - 1) {
       _restartTimer();
-      _controller.animateToPage(
-        ++_current,
+      _controller!.animateToPage(
+        _current = _current! + 1,
         duration: kSlideAnimation,
         curve: kSlideCurve,
       );
@@ -71,7 +79,7 @@ class _SlideShowPageState extends State<SlideShowPage> {
             child: Center(
               child: SmoothPageIndicator(
                 count: kSlides.length,
-                controller: _controller,
+                controller: _controller!,
                 effect: ColorTransitionEffect(
                   dotColor: Theme.of(context).highlightColor,
                   activeDotColor: Theme.of(context).primaryColor,
