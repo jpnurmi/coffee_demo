@@ -24,39 +24,57 @@ class CloudProviderPage extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: kSpacing),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            padding: const EdgeInsets.symmetric(horizontal: kSpacing),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: kProviders.map((asset) {
                 return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: ElevatedButton(
-                        onPressed: () =>
-                            Navigator.of(context).pushNamed(Routes.slideShow),
-                        style: ElevatedButton.styleFrom(
-                          elevation: 4,
-                          primary: Colors.white,
-                          onPrimary: Theme.of(context).highlightColor,
-                        ),
-                        child: asset.endsWith('.svg')
-                            ? SvgPicture.asset('assets/$asset',
-                                fit: BoxFit.contain)
-                            : Image.asset('assets/$asset', fit: BoxFit.contain),
-                      ),
-                    ),
+                  child: _CloudProviderButton(
+                    asset: asset,
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(Routes.slideShow),
                   ),
                 );
               }).toList(),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: kSpacing),
           const Spacer(),
         ],
+      ),
+    );
+  }
+}
+
+class _CloudProviderButton extends StatelessWidget {
+  const _CloudProviderButton({
+    Key? key,
+    required this.asset,
+    required this.onPressed,
+  }) : super(key: key);
+
+  final String asset;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1,
+      child: Padding(
+        padding: const EdgeInsets.all(kSpacing),
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            elevation: 4,
+            primary: Colors.white,
+            onPrimary: Theme.of(context).highlightColor,
+          ),
+          child: asset.endsWith('.svg')
+              ? SvgPicture.asset('assets/$asset', fit: BoxFit.contain)
+              : Image.asset('assets/$asset', fit: BoxFit.contain),
+        ),
       ),
     );
   }

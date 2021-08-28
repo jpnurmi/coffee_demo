@@ -62,14 +62,7 @@ class _SlideShowPageState extends State<SlideShowPage> {
             controller: _controller,
             physics: const NeverScrollableScrollPhysics(),
             onPageChanged: (page) => setState(() => _current = page),
-            children: kSlides.map((asset) {
-              return Padding(
-                padding: const EdgeInsets.all(4 * kPadding),
-                child: asset.endsWith('.svg')
-                    ? SvgPicture.asset('assets/$asset', fit: BoxFit.contain)
-                    : Image.asset('assets/$asset', fit: BoxFit.contain),
-              );
-            }).toList(),
+            children: kSlides.map((asset) => _AssetImage(asset)).toList(),
           ),
           Positioned(
             left: 0,
@@ -88,6 +81,22 @@ class _SlideShowPageState extends State<SlideShowPage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _AssetImage extends StatelessWidget {
+  const _AssetImage(this.asset, {Key? key}) : super(key: key);
+
+  final String asset;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(4 * kPadding),
+      child: asset.endsWith('.svg')
+          ? SvgPicture.asset('assets/$asset', fit: BoxFit.contain)
+          : Image.asset('assets/$asset', fit: BoxFit.contain),
     );
   }
 }
