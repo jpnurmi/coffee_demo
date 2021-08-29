@@ -9,12 +9,18 @@ class SlideTransitionsBuilder extends PageTransitionsBuilder {
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
-    animation = CurvedAnimation(curve: Curves.easeInOut, parent: animation);
     return SlideTransition(
-      position:
-          Tween(begin: const Offset(1.0, 0.0), end: const Offset(0.0, 0.0))
-              .animate(animation),
-      child: child,
+      position: Tween(
+        begin: const Offset(1.0, 0.0),
+        end: Offset.zero,
+      ).animate(animation),
+      child: SlideTransition(
+        position: Tween(
+          begin: Offset.zero,
+          end: const Offset(-1.0, 0.0),
+        ).animate(secondaryAnimation),
+        child: child,
+      ),
     );
   }
 }
