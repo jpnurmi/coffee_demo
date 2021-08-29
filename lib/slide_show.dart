@@ -46,9 +46,14 @@ class _SlideShowPageState extends State<SlideShowPage> {
     super.dispose();
   }
 
+  void _updateCurrent(int current) {
+    _restartTimer();
+    setState(() => _current = current);
+  }
+
   void _next() {
+    _restartTimer();
     if (_current! < kSlides.length - 1) {
-      _restartTimer();
       _controller!.animateToPage(
         _current = _current! + 1,
         duration: kSlideAnimation,
@@ -66,11 +71,18 @@ class _SlideShowPageState extends State<SlideShowPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          PageView(
-            controller: _controller,
-            physics: const NeverScrollableScrollPhysics(),
-            onPageChanged: (page) => setState(() => _current = page),
-            children: kSlides.map((asset) => _AssetImage(asset)).toList(),
+          NotificationListener<OverscrollNotification>(
+            onNotification: (overscroll) {
+              if (overscroll.overscroll > 0) {
+                _next();
+              }
+              return true;
+            },
+            child: PageView(
+              controller: _controller,
+              onPageChanged: _updateCurrent,
+              children: kSlides.map((asset) => _AssetImage(asset)).toList(),
+            ),
           ),
           Positioned(
             left: 0,
