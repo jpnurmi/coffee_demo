@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
+          Opacity(opacity: 0.3, child: Image.asset('assets/wallpaper.jpg')),
           MaterialApp(
             title: 'Coffee demo',
             theme: yaru.lightTheme.copyWith(

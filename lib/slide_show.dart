@@ -68,6 +68,7 @@ class _SlideShowPageState extends State<SlideShowPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Stack(
         fit: StackFit.expand,
         children: [

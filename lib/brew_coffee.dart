@@ -18,6 +18,7 @@ class BrewCoffeePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Center(
         child: ElevatedButtonTheme(
           data: _createButtonTheme(context),

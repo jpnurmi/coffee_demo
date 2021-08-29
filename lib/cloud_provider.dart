@@ -69,7 +69,7 @@ class _CloudProviderButton extends StatelessWidget {
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             elevation: 4,
-            primary: Colors.white,
+            primary: Theme.of(context).colorScheme.background,
             onPrimary: Theme.of(context).highlightColor,
           ),
           child: asset.endsWith('.svg')
