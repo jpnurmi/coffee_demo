@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'constants.dart';
+
 class SlideTransitionsBuilder extends PageTransitionsBuilder {
   const SlideTransitionsBuilder();
   @override
@@ -13,12 +15,12 @@ class SlideTransitionsBuilder extends PageTransitionsBuilder {
       position: Tween(
         begin: const Offset(1.0, 0.0),
         end: Offset.zero,
-      ).animate(animation),
+      ).chain(CurveTween(curve: kSlideCurve)).animate(animation),
       child: SlideTransition(
         position: Tween(
           begin: Offset.zero,
           end: const Offset(-1.0, 0.0),
-        ).animate(secondaryAnimation),
+        ).chain(CurveTween(curve: kSlideCurve)).animate(secondaryAnimation),
         child: child,
       ),
     );
