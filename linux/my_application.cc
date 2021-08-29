@@ -51,7 +51,8 @@ static void my_application_activate(GApplication* application) {
   gtk_widget_show(GTK_WIDGET(window));
 
 #ifdef __aarch64__
-  GdkCursor* cursor = gdk_cursor_new(GDK_BLANK_CURSOR);
+  GdkDisplay* display = gdk_display_get_default();
+  GdkCursor* cursor = gdk_cursor_new_for_display(display, GDK_BLANK_CURSOR);
   gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(window)), cursor);
   gtk_window_fullscreen(window);
 #endif
