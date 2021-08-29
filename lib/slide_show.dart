@@ -74,8 +74,11 @@ class _SlideShowPageState extends State<SlideShowPage> {
         children: [
           NotificationListener<OverscrollNotification>(
             onNotification: (overscroll) {
+              _timer?.cancel();
               if (overscroll.overscroll > 0) {
-                _next();
+                Navigator.of(context).pushNamed(Routes.brewCoffee);
+              } else {
+                Navigator.of(context).pop();
               }
               return true;
             },
