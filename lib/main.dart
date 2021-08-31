@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -57,6 +59,11 @@ class MyApp extends StatelessWidget {
               alignment: Alignment.bottomRight,
             ),
           ),
+          if (Platform.environment['DESKTOP_SESSION'] == 'LXDE-pi')
+            const MouseRegion(
+              opaque: false,
+              cursor: SystemMouseCursors.none,
+            ),
         ],
       ),
     );
