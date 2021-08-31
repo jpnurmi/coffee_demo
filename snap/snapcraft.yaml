@@ -1,0 +1,63 @@
+name: coffee-demo
+version: git
+summary: Coffee Demo
+description: Brew coffee
+confinement: strict
+base: core18
+grade: devel
+architectures:
+  - build-on: arm64
+    run-on: [arm64]
+
+parts:
+  coffee-demo:
+    plugin: flutter
+    source: .
+    flutter-target: lib/main.dart
+
+  mir-kiosk-snap-launch:
+    plugin: dump
+    source: https://github.com/MirServer/mir-kiosk-snap-launch.git
+    override-build:  $SNAPCRAFT_PART_BUILD/build-with-plugs.sh opengl wayland
+    stage-packages:
+      - inotify-tools
+
+  assets:
+    plugin: nil
+    stage-packages:
+    - dmz-cursor-theme
+    - fonts-dejavu
+    - fonts-freefont-ttf
+    - fonts-ubuntu
+
+apps:
+  daemon:
+    daemon: simple
+    restart-condition: always
+    command-chain:
+      - bin/run-daemon
+      - bin/wayland-launch
+    command: bin/coffee_demo
+    extensions: [flutter-master]
+    plugs:
+    - opengl
+    - wayland
+
+  coffee-demo:
+    command-chain:
+      - bin/wayland-launch
+    command: coffee_demo
+    extensions: [flutter-master]
+    plugs:
+    - opengl
+    - wayland
+
+layout:
+  /usr/share/fonts:
+    bind: $SNAP/usr/share/fonts
+  /etc/fonts:
+    bind: $SNAP/etc/fonts
+  /usr/share/icons:
+    bind: $SNAP/usr/share/icons
+  /usr/share/coffee_demo:
+    bind: $SNAP/usr/share/coffee_demo
