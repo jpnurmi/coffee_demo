@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -82,10 +83,14 @@ class _SlideShowPageState extends State<SlideShowPage> {
               }
               return true;
             },
-            child: PageView(
-              controller: _controller,
-              onPageChanged: _updateCurrent,
-              children: kSlides.map((asset) => _AssetImage(asset)).toList(),
+            child: ScrollConfiguration(
+              behavior: _MouseDragScrollBehavior(),
+              child: PageView(
+                controller: _controller,
+                physics: const AlwaysScrollableScrollPhysics(),
+                onPageChanged: _updateCurrent,
+                children: kSlides.map((asset) => _AssetImage(asset)).toList(),
+              ),
             ),
           ),
           Positioned(
@@ -107,6 +112,15 @@ class _SlideShowPageState extends State<SlideShowPage> {
       ),
     );
   }
+}
+
+// https://flutter.dev/docs/release/breaking-changes/default-scroll-behavior-drag#setting-a-custom-scrollbehavior-for-your-application
+class _MouseDragScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }
 
 class _AssetImage extends StatelessWidget {
