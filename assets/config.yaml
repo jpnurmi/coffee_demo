@@ -1,3 +1,4 @@
+url: http://12.34.56.78:5000
 vendors:
   private: [mk8]
   public: [gcp, azu, aws, doc]

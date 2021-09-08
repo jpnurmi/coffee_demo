@@ -23,7 +23,7 @@ extension CoffeeName on Coffee {
   }
 }
 
-class CoffeeScreen extends StatelessWidget {
+class CoffeeScreen extends StatefulWidget {
   const CoffeeScreen({Key? key}) : super(key: key);
 
   static Widget create(BuildContext context) {
@@ -31,6 +31,30 @@ class CoffeeScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => CoffeeModel(service, kUsers.first, Coffee.latte),
       child: const CoffeeScreen(),
+    );
+  }
+
+  @override
+  _CoffeeScreenState createState() => _CoffeeScreenState();
+}
+
+class _CoffeeScreenState extends State<CoffeeScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    final model = Provider.of<CoffeeModel>(context, listen: false);
+    model.init(
+      onSuccess: () => Navigator.of(context).pushNamed(Routes.brew),
+      onFailure: () {
+        _showMessage('Something went wrong', Theme.of(context).errorColor);
+      },
+    );
+  }
+
+  void _showMessage(String message, [Color? color]) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message, style: TextStyle(color: color))),
     );
   }
 
@@ -43,44 +67,47 @@ class CoffeeScreen extends StatelessWidget {
         child: Center(
           child: Column(
             children: <Widget>[
-              Text(
-                'Who are you and what kind of coffee do you like?',
-                style: Theme.of(context).textTheme.headline4,
-              ),
               Expanded(
-                child: Row(
-                  children: <Widget>[
-                    const Text('I am a'),
-                    const SizedBox(width: kSpacing),
-                    DropdownButton<String>(
-                      value: model.user,
-                      items: kUsers
-                          .map((who) => DropdownMenuItem<String>(
-                              value: who, child: Text(who)))
-                          .toList(),
-                      onChanged: (value) => model.user = value!,
-                    ),
-                    const SizedBox(width: kSpacing),
-                    const Text('and I would like a'),
-                    const SizedBox(width: kSpacing),
-                    DropdownButton<Coffee>(
-                      value: model.coffee,
-                      items: Coffee.values
-                          .map((coffee) => DropdownMenuItem<Coffee>(
-                              value: coffee, child: Text(coffee.name)))
-                          .toList(),
-                      onChanged: (value) => model.coffee = value!,
-                    ),
-                  ],
+                child: Text(
+                  'Who are you and what kind of coffee do you like?',
+                  style: Theme.of(context).textTheme.headline4,
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  final service = Provider.of<Service>(context, listen: false);
-                  service.selectCoffee(model.coffee.type);
-                  Navigator.of(context).pushNamed(Routes.brew);
-                },
-                child: const Text('NEXT >'),
+              Row(
+                children: <Widget>[
+                  const Text('I am a'),
+                  const SizedBox(width: kSpacing),
+                  DropdownButton<String>(
+                    value: model.user,
+                    items: kUsers
+                        .map((who) => DropdownMenuItem<String>(
+                            value: who, child: Text(who)))
+                        .toList(),
+                    onChanged: (value) => model.user = value!,
+                  ),
+                  const SizedBox(width: kSpacing),
+                  const Text('and I would like a'),
+                  const SizedBox(width: kSpacing),
+                  DropdownButton<Coffee>(
+                    value: model.coffee,
+                    items: Coffee.values
+                        .map((coffee) => DropdownMenuItem<Coffee>(
+                            value: coffee, child: Text(coffee.name)))
+                        .toList(),
+                    onChanged: (value) => model.coffee = value!,
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: model.isBusy
+                      ? const CircularProgressIndicator()
+                      : ElevatedButton(
+                          onPressed: model.selectCoffee,
+                          child: const Text('NEXT >'),
+                        ),
+                ),
               ),
             ],
           ),

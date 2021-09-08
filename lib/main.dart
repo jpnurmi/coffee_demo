@@ -17,7 +17,7 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       Provider.value(value: config),
-      Provider(create: (_) => Service()),
+      Provider(create: (_) => Service(config.url)),
     ],
     child: const MyApp(),
   ));

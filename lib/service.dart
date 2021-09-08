@@ -1,12 +1,12 @@
-import 'dart:math';
-
 import 'package:dio/dio.dart';
 
 class Service {
+  Service(this.serverAddress);
+
   Dio? _dio;
-  CancelToken? _token;
   String? _vendor;
   String? _coffee;
+  final String serverAddress;
 
   Dio get dio => _dio ??= Dio();
 
@@ -16,36 +16,37 @@ class Service {
   String get coffee => _coffee ?? '';
   void selectCoffee(String coffee) => _coffee = coffee;
 
-  static bool _getResult(Response response) => Random().nextBool();
-
-  static Future<Response> _randomDelay(Response response) {
-    final delay = Duration(seconds: 1 + Random().nextInt(4));
-    return Future.delayed(delay, () => response);
-  }
-
-  Future<bool> request() {
-    final response = dio.get(
-      'http://geoname-lookup.ubuntu.com/',
-      queryParameters: <String, String>{'query': 'London'},
-      cancelToken: _token = CancelToken(),
-      options: Options(responseType: ResponseType.plain),
-    );
-    return response.then(_randomDelay).then(_getResult);
-  }
-
-  Future<void> cancel() async => _token?.cancel();
-
   Future<bool> healthCheck() async {
-    final response = await dio.get(
-      'http://<server-ip>:5000/',
-      queryParameters: <String, String>{
-        'vendor': vendor,
-        'requested_at': DateTime.now().toIso8601String(),
-        'msg_direction': 'from_kiosk',
-        'msg_type': 'health_check',
+    return _post('/health_check', {'msg_type': 'health_check'});
+  }
+
+  Future<bool> makeCoffee() async {
+    return _post(
+      '/coffee_order',
+      {
+        'msg_type': 'coffee_order',
+        'coffee_type': coffee,
+        'coffee_size': 'large',
       },
-      options: Options(responseType: ResponseType.json),
     );
-    return response.data['status'] == 'ok';
+  }
+
+  Future<bool> _post(String path, Map<String, dynamic> formData) async {
+    try {
+      final response = await dio.post(
+        '$serverAddress/$path',
+        data: FormData.fromMap(formData
+          ..addAll({
+            'vendor': vendor,
+            'requested_at': DateTime.now().toIso8601String(),
+            'msg_direction': 'from_kiosk',
+          })),
+        options: Options(responseType: ResponseType.json),
+      );
+      return response.data['status'] == 'ok';
+    } on DioError catch (e) {
+      print(e.message);
+      return false;
+    }
   }
 }

@@ -66,8 +66,8 @@ class BrewModel extends ChangeNotifier {
 
   Future<void> makeCoffee() async {
     _setBusy(true);
-    final response = await _service.request();
-    if (response == true) {
+    final ok = await _service.makeCoffee();
+    if (ok) {
       _onSuccess();
     } else {
       _onFailure();
