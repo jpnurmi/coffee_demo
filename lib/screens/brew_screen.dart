@@ -2,17 +2,28 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:wizard_router/wizard_router.dart';
 
+import '../api.dart';
 import '../constants.dart';
-import '../routes.dart';
+
+const kSlides = <String>[
+  'Swipe left to know more about the open source technologies we used to build this project.',
+  'Slide 2',
+  'Slide 3',
+];
 
 class BrewScreen extends StatefulWidget {
   const BrewScreen({Key? key}) : super(key: key);
 
-  static Widget create(BuildContext context) => const BrewScreen();
+  static Widget create(BuildContext context) {
+    final api = Provider.of<Api>(context, listen: false);
+    return ChangeNotifierProvider(
+      create: (_) => BrewModel(api, kSlides.length),
+      child: const BrewScreen(),
+    );
+  }
 
   @override
   State<BrewScreen> createState() => _BrewScreenState();
@@ -20,25 +31,35 @@ class BrewScreen extends StatefulWidget {
 
 class _BrewScreenState extends State<BrewScreen> {
   PageController? _controller;
-  int? _current;
-  Timer? _timer;
-
-  void _restartTimer() {
-    _timer?.cancel();
-    _timer = Timer.periodic(kSlideDelay, (_) => _next());
-  }
 
   @override
   void initState() {
     super.initState();
-    _restartTimer();
+
+    final model = Provider.of<BrewModel>(context, listen: false);
+    model.init(
+      onSlide: _animateTo,
+      onSuccess: () {
+        _showMessage('Success!');
+        Wizard.of(context).next();
+      },
+      onFailure: () {
+        _showMessage('Something went wrong', Theme.of(context).errorColor);
+      },
+    );
+  }
+
+  void _showMessage(String message, [Color? color]) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message, style: TextStyle(color: color))),
+    );
   }
 
   @override
   void didChangeDependencies() {
-    _current = Wizard.of(context).arguments as int;
     _controller?.dispose();
-    _controller = PageController(initialPage: _current!);
+    final model = Provider.of<BrewModel>(context, listen: false);
+    _controller = PageController(initialPage: model.slide);
     super.didChangeDependencies();
   }
 
@@ -48,67 +69,102 @@ class _BrewScreenState extends State<BrewScreen> {
     super.dispose();
   }
 
-  void _updateCurrent(int current) {
-    _restartTimer();
-    setState(() => _current = current);
+  void _animateTo(int page) {
+    _controller!.animateToPage(
+      page,
+      curve: kSlideCurve,
+      duration: kSlideAnimation,
+    );
   }
 
   void _next() {
-    _restartTimer();
-    // if (_current! < kSlides.length - 1) {
-    //   _controller!.animateToPage(
-    //     _current = _current! + 1,
-    //     duration: kSlideAnimation,
-    //     curve: kSlideCurve,
-    //   );
-    // } else {
-    //   _timer?.cancel();
-    //   Navigator.of(context).pushNamed(Routes.result);
-    // }
+    final model = Provider.of<BrewModel>(context, listen: false);
+    _animateTo(model.next());
+  }
+
+  void _previous() {
+    final model = Provider.of<BrewModel>(context, listen: false);
+    _animateTo(model.previous());
   }
 
   @override
   Widget build(BuildContext context) {
+    final model = Provider.of<BrewModel>(context);
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          NotificationListener<OverscrollNotification>(
-            onNotification: (overscroll) {
-              _timer?.cancel();
-              if (overscroll.overscroll > 0) {
-                Navigator.of(context).pushNamed(Routes.result);
-              } else {
-                Navigator.of(context).pop();
-              }
-              return true;
-            },
-            child: ScrollConfiguration(
-              behavior: _MouseDragScrollBehavior(),
+      body: ScrollConfiguration(
+        behavior: _MouseDragScrollBehavior(),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Positioned.fill(
               child: PageView(
                 controller: _controller,
                 physics: const AlwaysScrollableScrollPhysics(),
-                onPageChanged: _updateCurrent,
-                //children: kSlides.map((asset) => _AssetImage(asset)).toList(),
+                onPageChanged: model.setSlide,
+                children: kSlides.map((label) => _Slide(label)).toList(),
               ),
             ),
-          ),
-          // Positioned(
-          //   left: 0,
-          //   right: 0,
-          //   bottom: kPadding,
-          //   child: Center(
-          //     child: SmoothPageIndicator(
-          //       count: kSlides.length,
-          //       controller: _controller!,
-          //       effect: ColorTransitionEffect(
-          //         dotColor: Theme.of(context).highlightColor,
-          //         activeDotColor: Theme.of(context).primaryColor,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-        ],
+            if (model.isBusy)
+              const Positioned(
+                top: kPadding,
+                right: kPadding * 4,
+                child: CircularProgressIndicator(),
+              ),
+            Positioned(
+              top: 0,
+              bottom: 0,
+              left: kSpacing,
+              child: IconButton(
+                onPressed: model.hasPrevious ? _previous : null,
+                icon: const Icon(Icons.chevron_left),
+              ),
+            ),
+            Positioned(
+              top: 0,
+              bottom: 0,
+              right: kSpacing,
+              child: IconButton(
+                onPressed: model.hasNext ? _next : null,
+                icon: const Icon(Icons.chevron_right),
+              ),
+            ),
+            Positioned(
+              top: kPadding,
+              left: kPadding,
+              right: kPadding,
+              bottom: kPadding,
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    'We are brewing your infrastructure',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  const Spacer(),
+                  ElevatedButton(
+                    onPressed: model.isBusy ? null : model.makeCoffee,
+                    child: const Text('Make coffee!'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Slide extends StatelessWidget {
+  const _Slide(this.label, {Key? key}) : super(key: key);
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        label,
+        style: Theme.of(context).textTheme.headline5,
       ),
     );
   }
@@ -123,18 +179,72 @@ class _MouseDragScrollBehavior extends MaterialScrollBehavior {
       };
 }
 
-class _AssetImage extends StatelessWidget {
-  const _AssetImage(this.asset, {Key? key}) : super(key: key);
+class BrewModel extends ChangeNotifier {
+  BrewModel(this._api, this._count) : assert(_count > 0);
 
-  final String asset;
+  final Api _api;
+  final int _count;
+  var _current = 0;
+  Timer? _timer;
+  late ValueChanged<int> _onSlide;
+  late VoidCallback _onSuccess;
+  late VoidCallback _onFailure;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(4 * kPadding),
-      child: asset.endsWith('.svg')
-          ? SvgPicture.asset('assets/$asset', fit: BoxFit.contain)
-          : Image.asset('assets/$asset', fit: BoxFit.contain),
-    );
+  int get slide => _current;
+
+  int setSlide(int current) {
+    if (_current == current) return _current;
+    _restartTimer();
+    _current = current % _count;
+    _onSlide.call(_current);
+    notifyListeners();
+    return _current;
+  }
+
+  void init({
+    required ValueChanged<int> onSlide,
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
+  }) {
+    _restartTimer();
+    _onSlide = onSlide;
+    _onSuccess = onSuccess;
+    _onFailure = onFailure;
+  }
+
+  bool get hasNext => _current < _count - 1;
+  int next() => setSlide(_current + 1);
+
+  bool get hasPrevious => _current > 0;
+  int previous() => setSlide(_current - 1);
+
+  void _restartTimer() {
+    _timer?.cancel();
+    if (_current <= _count - 1) {
+      _timer = Timer.periodic(kSlideDelay, (_) {
+        if (next() >= _count - 1) {
+          _timer?.cancel();
+        }
+      });
+    }
+  }
+
+  var _busy = false;
+  bool get isBusy => _busy;
+  void _setBusy(bool busy) {
+    if (_busy == busy) return;
+    _busy = busy;
+    notifyListeners();
+  }
+
+  Future<void> makeCoffee() async {
+    _setBusy(true);
+    final response = await _api.request();
+    if (response == true) {
+      _onSuccess();
+    } else {
+      _onFailure();
+    }
+    _setBusy(false);
   }
 }
