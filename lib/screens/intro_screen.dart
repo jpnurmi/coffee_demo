@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:wizard_router/wizard_router.dart';
 
 import '../constants.dart';
+import '../routes.dart';
 
 class IntroScreen extends StatelessWidget {
   const IntroScreen({Key? key}) : super(key: key);
@@ -39,7 +39,7 @@ class IntroScreen extends StatelessWidget {
               ),
               const SizedBox(height: kSpacing),
               ElevatedButton(
-                onPressed: Wizard.of(context).next,
+                onPressed: () => Navigator.of(context).pushNamed(Routes.cloud),
                 child: const Text('NEXT >'),
               ),
               const SizedBox(height: kSpacing),

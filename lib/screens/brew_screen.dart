@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wizard_router/wizard_router.dart';
 
 import '../api.dart';
 import '../constants.dart';
+import '../routes.dart';
 
 const kSlides = <String>[
   'Swipe left to know more about the open source technologies we used to build this project.',
@@ -41,7 +41,7 @@ class _BrewScreenState extends State<BrewScreen> {
       onSlide: _animateTo,
       onSuccess: () {
         _showMessage('Success!');
-        Wizard.of(context).next();
+        Navigator.of(context).pushNamed(Routes.result);
       },
       onFailure: () {
         _showMessage('Something went wrong', Theme.of(context).errorColor);

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wizard_router/wizard_router.dart';
 
 import 'api.dart';
 import 'constants.dart';
@@ -30,17 +29,15 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const Wizard(
-        initialRoute: Routes.home,
-        routes: {
-          Routes.home: HomeScreen.create,
-          Routes.intro: IntroScreen.create,
-          Routes.cloud: CloudScreen.create,
-          Routes.coffee: CoffeeScreen.create,
-          Routes.brew: BrewScreen.create,
-          Routes.result: ResultScreen.create,
-        },
-      ),
+      initialRoute: Routes.home,
+      routes: const {
+        Routes.home: HomeScreen.create,
+        Routes.intro: IntroScreen.create,
+        Routes.cloud: CloudScreen.create,
+        Routes.coffee: CoffeeScreen.create,
+        Routes.brew: BrewScreen.create,
+        Routes.result: ResultScreen.create,
+      },
     );
   }
 }

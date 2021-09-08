@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wizard_router/wizard_router.dart';
 
 import '../constants.dart';
+import '../routes.dart';
 
 const kLabels = ['FREE COFFEE', 'FREE SOFTWARE'];
 const kInterval = Duration(seconds: 2);
@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final model = Provider.of<HomeModel>(context);
     return Scaffold(
       body: InkWell(
-        onTap: Wizard.of(context).next,
+        onTap: () => Navigator.of(context).pushNamed(Routes.intro),
         child: Padding(
           padding: const EdgeInsets.all(48.0),
           child: Center(
@@ -43,7 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
               children: <Widget>[
                 const Spacer(flex: 2),
                 ElevatedButton(
-                  onPressed: Wizard.of(context).next,
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed(Routes.intro),
                   child: IndexedStack(
                     index: model.index,
                     children: kLabels

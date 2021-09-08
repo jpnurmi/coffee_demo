@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:wizard_router/wizard_router.dart';
 
 import '../constants.dart';
+import '../routes.dart';
 
 class CloudProvider {
   const CloudProvider(this.asset, [this.title = '']);
@@ -46,7 +46,8 @@ class CloudScreen extends StatelessWidget {
                       child: _CloudProviderButton(
                         asset: kProviders[i].asset,
                         title: kProviders[i].title,
-                        onPressed: () => Wizard.of(context).next(arguments: i),
+                        onPressed: () =>
+                            Navigator.of(context).pushNamed(Routes.coffee),
                       ),
                     ),
                 ],

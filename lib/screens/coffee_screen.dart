@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wizard_router/wizard_router.dart';
 
 import '../constants.dart';
+import '../routes.dart';
 
 const kWho = <String>['SysAdmin', 'DevOps', 'CTO', 'Engineer', 'Other'];
 const kWhat = <String>['latte', 'black coffee', 'cappuccino'];
@@ -58,7 +58,7 @@ class CoffeeScreen extends StatelessWidget {
                 ),
               ),
               ElevatedButton(
-                onPressed: Wizard.of(context).next,
+                onPressed: () => Navigator.of(context).pushNamed(Routes.brew),
                 child: const Text('NEXT >'),
               ),
             ],
