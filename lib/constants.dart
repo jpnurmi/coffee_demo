@@ -6,19 +6,3 @@ const kSpacing = 24.0;
 const kSlideDelay = Duration(seconds: 5);
 const kSlideAnimation = Duration(milliseconds: 250);
 const kSlideCurve = Curves.easeInOut;
-
-const kSlides = <String>[
-  'aws.svg',
-  'oracle.png',
-  'ibm.svg',
-  'azure.png',
-  'google.png',
-];
-
-const kProviders = <String>[
-  'aws.svg',
-  'oracle.png',
-  'ibm.svg',
-  'azure.png',
-  'google.png',
-];

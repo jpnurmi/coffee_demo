@@ -55,16 +55,16 @@ class _BrewScreenState extends State<BrewScreen> {
 
   void _next() {
     _restartTimer();
-    if (_current! < kSlides.length - 1) {
-      _controller!.animateToPage(
-        _current = _current! + 1,
-        duration: kSlideAnimation,
-        curve: kSlideCurve,
-      );
-    } else {
-      _timer?.cancel();
-      Navigator.of(context).pushNamed(Routes.result);
-    }
+    // if (_current! < kSlides.length - 1) {
+    //   _controller!.animateToPage(
+    //     _current = _current! + 1,
+    //     duration: kSlideAnimation,
+    //     curve: kSlideCurve,
+    //   );
+    // } else {
+    //   _timer?.cancel();
+    //   Navigator.of(context).pushNamed(Routes.result);
+    // }
   }
 
   @override
@@ -89,25 +89,25 @@ class _BrewScreenState extends State<BrewScreen> {
                 controller: _controller,
                 physics: const AlwaysScrollableScrollPhysics(),
                 onPageChanged: _updateCurrent,
-                children: kSlides.map((asset) => _AssetImage(asset)).toList(),
+                //children: kSlides.map((asset) => _AssetImage(asset)).toList(),
               ),
             ),
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: kPadding,
-            child: Center(
-              child: SmoothPageIndicator(
-                count: kSlides.length,
-                controller: _controller!,
-                effect: ColorTransitionEffect(
-                  dotColor: Theme.of(context).highlightColor,
-                  activeDotColor: Theme.of(context).primaryColor,
-                ),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   left: 0,
+          //   right: 0,
+          //   bottom: kPadding,
+          //   child: Center(
+          //     child: SmoothPageIndicator(
+          //       count: kSlides.length,
+          //       controller: _controller!,
+          //       effect: ColorTransitionEffect(
+          //         dotColor: Theme.of(context).highlightColor,
+          //         activeDotColor: Theme.of(context).primaryColor,
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

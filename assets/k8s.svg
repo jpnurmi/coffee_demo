@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="100"
+   height="100"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="k8s.svg"
+   inkscape:version="1.1 (ce6663b3b7, 2021-05-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="6.6556426"
+     inkscape:cx="3.981584"
+     inkscape:cy="51.159598"
+     inkscape:window-width="3368"
+     inkscape:window-height="1376"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <path
+     d="m 50,81.8375 c -17.59,0 -31.84,-14.25 -31.84,-31.84 0,-17.585 14.25,-31.835 31.84,-31.835 17.59,0 31.84,14.25 31.84,31.835 0,17.59 -14.25,31.84 -31.84,31.84 z M 100,50 C 100,77.6125 77.6125,100 50,100 22.3875,100 0,77.6125 0,50 0,22.385 22.3875,0 50,0 77.6125,0 100,22.385 100,50 Z M 50,12.1625 C 29.09,12.1625 12.16,29.105 12.16,50 12.16,70.9 29.09,87.8375 50,87.8375 70.91,87.8375 87.84,70.9 87.84,50 87.84,29.105 70.91,12.1625 50,12.1625 Z"
+     fill="#666666"
+     fill-rule="nonzero"
+     id="path2"
+     style="stroke-width:2.5" />
+</svg>
