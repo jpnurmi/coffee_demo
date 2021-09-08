@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:yaru/yaru.dart' as yaru;
 
@@ -29,12 +28,6 @@ class MyApp extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Positioned.fill(
-            child: Opacity(
-              opacity: 0.3,
-              child: Image.asset('assets/wallpaper.jpg', fit: BoxFit.cover),
-            ),
-          ),
           MaterialApp(
             title: 'Coffee demo',
             theme: yaru.lightTheme.copyWith(
@@ -50,14 +43,6 @@ class MyApp extends StatelessWidget {
               Routes.slideShow: SlideShowPage.create,
               Routes.brewCoffee: BrewCoffeePage.create,
             },
-          ),
-          Positioned(
-            bottom: kPadding,
-            right: kPadding,
-            child: SvgPicture.asset(
-              'assets/ubuntu.svg',
-              alignment: Alignment.bottomRight,
-            ),
           ),
           if (Platform.environment['DESKTOP_SESSION'] == 'LXDE-pi')
             const MouseRegion(
