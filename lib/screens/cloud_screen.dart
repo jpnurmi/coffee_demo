@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:wizard_router/wizard_router.dart';
 
-import 'constants.dart';
-import 'routes.dart';
+import '../constants.dart';
 
-class CloudProviderPage extends StatelessWidget {
-  const CloudProviderPage({Key? key}) : super(key: key);
+class CloudScreen extends StatelessWidget {
+  const CloudScreen({Key? key}) : super(key: key);
 
-  static Widget create(BuildContext context) => const CloudProviderPage();
+  static Widget create(BuildContext context) => const CloudScreen();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: Column(
         children: <Widget>[
           Expanded(
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Text(
-                'SELECT CLOUD PROVIDER',
-                style: Theme.of(context).textTheme.headline3,
+                'Select a substrate',
+                style: Theme.of(context).textTheme.headline4,
               ),
             ),
           ),
@@ -34,8 +33,7 @@ class CloudProviderPage extends StatelessWidget {
                   Expanded(
                     child: _CloudProviderButton(
                       asset: kProviders[i],
-                      onPressed: () => Navigator.of(context)
-                          .pushNamed(Routes.slideShow, arguments: i),
+                      onPressed: () => Wizard.of(context).next(arguments: i),
                     ),
                   ),
               ],

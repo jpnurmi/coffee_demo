@@ -42,12 +42,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 const Spacer(flex: 2),
                 Text(
                   model.label,
-                  style: Theme.of(context).textTheme.headline1!,
+                  style: Theme.of(context).textTheme.headline1,
                 ),
                 const Spacer(flex: 1),
                 Text(
                   'Touch the screen to start',
-                  style: Theme.of(context).textTheme.headline4!,
+                  style: Theme.of(context).textTheme.headline4,
                 ),
                 const Spacer(flex: 3),
                 const Text('Powered by Canonical and Open Source.'),

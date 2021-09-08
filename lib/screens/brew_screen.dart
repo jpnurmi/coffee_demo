@@ -4,20 +4,21 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:wizard_router/wizard_router.dart';
 
-import 'constants.dart';
-import 'routes.dart';
+import '../constants.dart';
+import '../routes.dart';
 
-class SlideShowPage extends StatefulWidget {
-  const SlideShowPage({Key? key}) : super(key: key);
+class BrewScreen extends StatefulWidget {
+  const BrewScreen({Key? key}) : super(key: key);
 
-  static Widget create(BuildContext context) => const SlideShowPage();
+  static Widget create(BuildContext context) => const BrewScreen();
 
   @override
-  State<SlideShowPage> createState() => _SlideShowPageState();
+  State<BrewScreen> createState() => _BrewScreenState();
 }
 
-class _SlideShowPageState extends State<SlideShowPage> {
+class _BrewScreenState extends State<BrewScreen> {
   PageController? _controller;
   int? _current;
   Timer? _timer;
@@ -35,7 +36,7 @@ class _SlideShowPageState extends State<SlideShowPage> {
 
   @override
   void didChangeDependencies() {
-    _current = ModalRoute.of(context)!.settings.arguments as int;
+    _current = Wizard.of(context).arguments as int;
     _controller?.dispose();
     _controller = PageController(initialPage: _current!);
     super.didChangeDependencies();
@@ -62,7 +63,7 @@ class _SlideShowPageState extends State<SlideShowPage> {
       );
     } else {
       _timer?.cancel();
-      Navigator.of(context).pushNamed(Routes.brewCoffee);
+      Navigator.of(context).pushNamed(Routes.result);
     }
   }
 
@@ -77,7 +78,7 @@ class _SlideShowPageState extends State<SlideShowPage> {
             onNotification: (overscroll) {
               _timer?.cancel();
               if (overscroll.overscroll > 0) {
-                Navigator.of(context).pushNamed(Routes.brewCoffee);
+                Navigator.of(context).pushNamed(Routes.result);
               } else {
                 Navigator.of(context).pop();
               }

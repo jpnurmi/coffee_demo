@@ -17,7 +17,7 @@ class IntroScreen extends StatelessWidget {
             children: <Widget>[
               Text(
                 'A coffee machine running on Kubernetes?',
-                style: Theme.of(context).textTheme.headline4!,
+                style: Theme.of(context).textTheme.headline4,
               ),
               const SizedBox(height: 48),
               Expanded(

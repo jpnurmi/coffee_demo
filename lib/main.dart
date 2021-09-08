@@ -1,18 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wizard_router/wizard_router.dart';
 import 'package:yaru/yaru.dart' as yaru;
 
 import 'api.dart';
-import 'brew_coffee.dart';
-import 'cloud_provider.dart';
-import 'constants.dart';
 import 'routes.dart';
 import 'screens.dart';
-import 'slide_show.dart';
-import 'transitions.dart';
 
 void main() async {
   final api = Api();
@@ -33,9 +26,10 @@ class MyApp extends StatelessWidget {
         routes: {
           Routes.home: HomeScreen.create,
           Routes.intro: IntroScreen.create,
-          Routes.cloudProvider: CloudProviderPage.create,
-          Routes.slideShow: SlideShowPage.create,
-          Routes.brewCoffee: BrewCoffeePage.create,
+          Routes.cloud: CloudScreen.create,
+          Routes.coffee: CoffeeScreen.create,
+          Routes.brew: BrewScreen.create,
+          Routes.result: ResultScreen.create,
         },
       ),
     );

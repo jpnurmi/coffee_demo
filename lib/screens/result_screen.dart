@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'api.dart';
-import 'constants.dart';
+import '../api.dart';
+import '../constants.dart';
 
-class BrewCoffeePage extends StatelessWidget {
-  const BrewCoffeePage({Key? key}) : super(key: key);
+class ResultScreen extends StatelessWidget {
+  const ResultScreen({Key? key}) : super(key: key);
 
   static Widget create(BuildContext context) {
     final api = Provider.of<Api>(context, listen: false);
     return ChangeNotifierProvider(
-      create: (_) => BrewCoffeeModel(api),
-      child: const BrewCoffeePage(),
+      create: (_) => ResultModel(api),
+      child: const ResultScreen(),
     );
   }
 
@@ -41,9 +41,9 @@ class BrewCoffeePage extends StatelessWidget {
   }
 
   static Widget _createButton(BuildContext context) {
-    final model = Provider.of<BrewCoffeeModel>(context);
+    final model = Provider.of<ResultModel>(context);
     switch (model.value) {
-      case BrewCoffeeState.ready:
+      case ResultScreenState.ready:
         return ElevatedButton(
           child: const Text('Brew'),
           style: ElevatedButton.styleFrom(
@@ -51,18 +51,18 @@ class BrewCoffeePage extends StatelessWidget {
           ),
           onPressed: model.brew,
         );
-      case BrewCoffeeState.brewing:
+      case ResultScreenState.brewing:
         return ElevatedButton.icon(
           icon: const CircularProgressIndicator(),
           label: const Text('Brewing...'),
           onPressed: null,
         );
-      case BrewCoffeeState.success:
+      case ResultScreenState.success:
         return ElevatedButton(
           child: const Text('Success'),
           onPressed: () => _restart(context),
         );
-      case BrewCoffeeState.failure:
+      case ResultScreenState.failure:
         return ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: Theme.of(context).errorColor,
@@ -80,7 +80,7 @@ class BrewCoffeePage extends StatelessWidget {
   }
 }
 
-enum BrewCoffeeState {
+enum ResultScreenState {
   ready,
   brewing,
   canceled,
@@ -88,25 +88,25 @@ enum BrewCoffeeState {
   failure,
 }
 
-class BrewCoffeeModel extends ValueNotifier<BrewCoffeeState> {
-  BrewCoffeeModel(this._api) : super(BrewCoffeeState.ready);
+class ResultModel extends ValueNotifier<ResultScreenState> {
+  ResultModel(this._api) : super(ResultScreenState.ready);
 
   final Api _api;
 
-  bool get isBrewing => value == BrewCoffeeState.brewing;
-  bool get isSuccess => value == BrewCoffeeState.success;
-  bool get isFailure => value == BrewCoffeeState.failure;
+  bool get isBrewing => value == ResultScreenState.brewing;
+  bool get isSuccess => value == ResultScreenState.success;
+  bool get isFailure => value == ResultScreenState.failure;
 
   Future<void> brew() => _cancel().then((_) => _request());
 
   Future<void> _cancel() {
-    return _api.cancel().then((_) => value = BrewCoffeeState.canceled);
+    return _api.cancel().then((_) => value = ResultScreenState.canceled);
   }
 
   Future<void> _request() {
-    value = BrewCoffeeState.brewing;
+    value = ResultScreenState.brewing;
     return _api.request().then((result) {
-      value = result ? BrewCoffeeState.success : BrewCoffeeState.failure;
+      value = result ? ResultScreenState.success : ResultScreenState.failure;
     });
   }
 }

@@ -1,7 +1,8 @@
 abstract class Routes {
   static const String home = '/';
   static const String intro = '/intro';
-  static const String cloudProvider = '/cloud';
-  static const String slideShow = '/slide-show';
-  static const String brewCoffee = '/brew-coffee';
+  static const String cloud = '/cloud';
+  static const String coffee = '/coffee';
+  static const String brew = '/brew';
+  static const String result = '/result';
 }
