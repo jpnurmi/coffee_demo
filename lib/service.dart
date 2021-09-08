@@ -5,10 +5,18 @@ import 'package:dio/dio.dart';
 class Service {
   Dio? _dio;
   CancelToken? _token;
+  String? _vendor;
+  String? _coffee;
 
   Dio get dio => _dio ??= Dio();
 
   Future<void> init() async {}
+
+  String get vendor => _vendor ??= '';
+  void selectVendor(String vendor) => _vendor = vendor;
+
+  String get coffee => _coffee ?? '';
+  void selectCoffee(String coffee) => _coffee = coffee;
 
   static bool _getResult(Response response) => Random().nextBool();
 

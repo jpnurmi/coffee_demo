@@ -1,19 +1,44 @@
 import 'package:flutter/foundation.dart';
 
+import '../service.dart';
+
+enum Coffee {
+  latte,
+  black,
+  cappuccino,
+  tea,
+}
+
+extension CoffeeType on Coffee {
+  String get type {
+    switch (this) {
+      case Coffee.latte:
+        return 'LAT';
+      case Coffee.black:
+        return 'BCK';
+      case Coffee.cappuccino:
+        return 'CAP';
+      case Coffee.tea:
+        return 'TEA';
+    }
+  }
+}
+
 class CoffeeModel extends ChangeNotifier {
-  CoffeeModel(String who, String what)
-      : _who = ValueNotifier(who),
-        _what = ValueNotifier(what) {
-    _who.addListener(notifyListeners);
-    _what.addListener(notifyListeners);
+  CoffeeModel(this._service, String user, Coffee coffee)
+      : _user = ValueNotifier(user),
+        _coffee = ValueNotifier(coffee) {
+    _user.addListener(notifyListeners);
+    _coffee.addListener(notifyListeners);
   }
 
-  final ValueNotifier<String> _who;
-  final ValueNotifier<String> _what;
+  final Service _service;
+  final ValueNotifier<String> _user;
+  final ValueNotifier<Coffee> _coffee;
 
-  String get who => _who.value;
-  set who(String who) => _who.value = who;
+  String get user => _user.value;
+  set user(String user) => _user.value = user;
 
-  String get what => _what.value;
-  set what(String what) => _what.value = what;
+  Coffee get coffee => _coffee.value;
+  set coffee(Coffee coffee) => _coffee.value = coffee;
 }

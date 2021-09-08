@@ -1,27 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
 import '../routes.dart';
-
-class CloudProvider {
-  const CloudProvider({required this.vendor, required this.public});
-  final String vendor;
-  final bool public;
-}
-
-const kProviders = [
-  CloudProvider(vendor: 'mk8', public: false),
-  CloudProvider(vendor: 'gcp', public: true),
-  CloudProvider(vendor: 'azu', public: true),
-  CloudProvider(vendor: 'aws', public: true),
-  CloudProvider(vendor: 'doc', public: true),
-];
+import '../service.dart';
+import 'vendor_model.dart';
 
 class CloudScreen extends StatelessWidget {
   const CloudScreen({Key? key}) : super(key: key);
 
-  static Widget create(BuildContext context) => const CloudScreen();
+  static Widget create(BuildContext context) {
+    final service = Provider.of<Service>(context, listen: false);
+    return Provider(
+      create: (_) => VendorModel(service),
+      child: const CloudScreen(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +36,13 @@ class CloudScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _CloudProviderGrid(
+                _VendorGrid(
                   title: 'Private Cloud',
-                  providers: kProviders.where((provider) => !provider.public),
+                  vendors: kVendors.where((vendor) => !vendor.public),
                 ),
-                _CloudProviderGrid(
+                _VendorGrid(
                   title: 'Public Cloud',
-                  providers: kProviders.where((provider) => provider.public),
+                  vendors: kVendors.where((vendor) => vendor.public),
                 ),
               ],
             ),
@@ -59,8 +54,8 @@ class CloudScreen extends StatelessWidget {
   }
 }
 
-class _CloudProviderButton extends StatelessWidget {
-  const _CloudProviderButton({
+class _VendorButton extends StatelessWidget {
+  const _VendorButton({
     Key? key,
     required this.vendor,
     required this.onPressed,
@@ -84,15 +79,15 @@ class _CloudProviderButton extends StatelessWidget {
   }
 }
 
-class _CloudProviderGrid extends StatelessWidget {
-  const _CloudProviderGrid({
+class _VendorGrid extends StatelessWidget {
+  const _VendorGrid({
     Key? key,
     required this.title,
-    required this.providers,
+    required this.vendors,
   }) : super(key: key);
 
   final String title;
-  final Iterable<CloudProvider> providers;
+  final Iterable<Vendor> vendors;
 
   @override
   Widget build(BuildContext context) {
@@ -106,10 +101,13 @@ class _CloudProviderGrid extends StatelessWidget {
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             crossAxisCount: 2,
-            children: providers.map((provider) {
-              return _CloudProviderButton(
-                vendor: provider.vendor,
+            children: vendors.map((vendor) {
+              return _VendorButton(
+                vendor: vendor.name,
                 onPressed: () {
+                  final model =
+                      Provider.of<VendorModel>(context, listen: false);
+                  model.selectVendor(vendor);
                   Navigator.of(context).pushNamed(Routes.coffee);
                 },
               );
