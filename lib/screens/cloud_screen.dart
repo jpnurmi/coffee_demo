@@ -84,11 +84,6 @@ class _CloudProviderButton extends StatelessWidget {
             padding: const EdgeInsets.all(kSpacing),
             child: ElevatedButton(
               onPressed: onPressed,
-              style: ElevatedButton.styleFrom(
-                elevation: 4,
-                primary: Theme.of(context).colorScheme.background,
-                onPrimary: Theme.of(context).highlightColor,
-              ),
               child: asset.endsWith('.svg')
                   ? SvgPicture.asset('assets/$asset', fit: BoxFit.contain)
                   : Image.asset('assets/$asset', fit: BoxFit.contain),

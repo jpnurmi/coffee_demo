@@ -44,20 +44,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 const Spacer(flex: 2),
                 ElevatedButton(
                   onPressed: Wizard.of(context).next,
-                  style: ElevatedButton.styleFrom(
-                    elevation: 4,
-                    primary: Theme.of(context).colorScheme.background,
-                    onPrimary: Theme.of(context).highlightColor,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(kSpacing),
-                    child: IndexedStack(
-                      index: model.index,
-                      children: kLabels
-                          .map((label) => Text(label,
-                              style: Theme.of(context).textTheme.headline1))
-                          .toList(),
-                    ),
+                  child: IndexedStack(
+                    index: model.index,
+                    children: kLabels
+                        .map((label) => Text(label,
+                            style: Theme.of(context).textTheme.button!.copyWith(
+                                  fontSize: 96,
+                                  fontWeight: FontWeight.w400,
+                                )))
+                        .toList(),
                   ),
                 ),
                 const Spacer(flex: 1),

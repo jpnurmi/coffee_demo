@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wizard_router/wizard_router.dart';
-import 'package:yaru/yaru.dart' as yaru;
 
 import 'api.dart';
+import 'constants.dart';
 import 'routes.dart';
 import 'screens.dart';
 
@@ -20,7 +20,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Coffee demo',
-      theme: yaru.lightTheme,
+      theme: ThemeData.light().copyWith(
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.white,
+            onPrimary: Colors.black87,
+            padding: const EdgeInsets.all(kSpacing),
+            minimumSize: const Size(192, 48),
+          ),
+        ),
+      ),
       home: const Wizard(
         initialRoute: Routes.home,
         routes: {

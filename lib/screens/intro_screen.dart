@@ -38,7 +38,7 @@ class IntroScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: kSpacing),
-              OutlinedButton(
+              ElevatedButton(
                 onPressed: Wizard.of(context).next,
                 child: const Text('NEXT >'),
               ),
