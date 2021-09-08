@@ -12,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 
   static Widget create(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => HomeModel(kLabels),
+      create: (_) => HomeModel(kLabels.length),
       child: const HomeScreen(),
     );
   }
@@ -40,9 +40,23 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: <Widget>[
                 const Spacer(flex: 2),
-                Text(
-                  model.label,
-                  style: Theme.of(context).textTheme.headline1,
+                ElevatedButton(
+                  onPressed: Wizard.of(context).next,
+                  style: ElevatedButton.styleFrom(
+                    elevation: 4,
+                    primary: Theme.of(context).colorScheme.background,
+                    onPrimary: Theme.of(context).highlightColor,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: IndexedStack(
+                      index: model.index,
+                      children: kLabels
+                          .map((label) => Text(label,
+                              style: Theme.of(context).textTheme.headline1))
+                          .toList(),
+                    ),
+                  ),
                 ),
                 const Spacer(flex: 1),
                 Text(
@@ -61,16 +75,16 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class HomeModel extends ChangeNotifier {
-  HomeModel(this._labels);
+  HomeModel(this._count);
 
   int _index = 0;
+  final int _count;
   late Timer _timer;
-  final List<String> _labels;
 
-  String get label => _labels[_index];
+  int get index => _index;
 
   void next() {
-    _index = (_index + 1) % kLabels.length;
+    _index = (_index + 1) % _count;
     notifyListeners();
   }
 
