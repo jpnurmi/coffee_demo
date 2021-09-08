@@ -41,19 +41,14 @@ class _BrewScreenState extends State<BrewScreen> {
     final model = Provider.of<BrewModel>(context, listen: false);
     model.init(
       onSlide: _animateTo,
-      onSuccess: () {
-        _showMessage('Success!');
-        Navigator.of(context).pushNamed(Routes.result);
-      },
-      onFailure: () {
-        _showMessage('Something went wrong', Theme.of(context).errorColor);
-      },
+      onSuccess: () => Navigator.of(context).pushNamed(Routes.result),
+      onFailure: () => _showError(model.error),
     );
   }
 
-  void _showMessage(String message, [Color? color]) {
+  void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message, style: TextStyle(color: color))),
+      SnackBar(content: Text(message)),
     );
   }
 

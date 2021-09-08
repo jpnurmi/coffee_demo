@@ -60,6 +60,8 @@ class CoffeeModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  String get error => _service.error ?? 'Unknown error';
+
   Future<void> selectCoffee() async {
     _setBusy(true);
     final ok = await _service.healthCheck();

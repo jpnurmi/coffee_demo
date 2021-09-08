@@ -6,6 +6,7 @@ class Service {
   Dio? _dio;
   String? _vendor;
   String? _coffee;
+  String? _error;
   final String serverAddress;
 
   Dio get dio => _dio ??= Dio();
@@ -15,6 +16,8 @@ class Service {
 
   String get coffee => _coffee ?? '';
   void selectCoffee(String coffee) => _coffee = coffee;
+
+  String? get error => _error;
 
   Future<bool> healthCheck() async {
     return _post('/health_check', {'msg_type': 'health_check'});
@@ -45,7 +48,7 @@ class Service {
       );
       return response.data['status'] == 'ok';
     } on DioError catch (e) {
-      print(e.message);
+      _error = e.message;
       return false;
     }
   }

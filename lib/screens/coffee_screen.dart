@@ -46,15 +46,13 @@ class _CoffeeScreenState extends State<CoffeeScreen> {
     final model = Provider.of<CoffeeModel>(context, listen: false);
     model.init(
       onSuccess: () => Navigator.of(context).pushNamed(Routes.brew),
-      onFailure: () {
-        _showMessage('Something went wrong', Theme.of(context).errorColor);
-      },
+      onFailure: () => _showError(model.error),
     );
   }
 
-  void _showMessage(String message, [Color? color]) {
+  void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message, style: TextStyle(color: color))),
+      SnackBar(content: Text(message)),
     );
   }
 
