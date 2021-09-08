@@ -70,7 +70,6 @@ class _BrewScreenState extends State<BrewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: Stack(
         fit: StackFit.expand,
         children: [
