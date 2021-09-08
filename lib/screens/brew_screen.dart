@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,12 +5,16 @@ import 'package:provider/provider.dart';
 import '../api.dart';
 import '../constants.dart';
 import '../routes.dart';
+import 'brew_model.dart';
 
 const kSlides = <String>[
   'Swipe left to know more about the open source technologies we used to build this project.',
   'Slide 2',
   'Slide 3',
 ];
+
+const kSlideCurve = Curves.easeInOut;
+const kSlideAnimation = Duration(milliseconds: 250);
 
 class BrewScreen extends StatefulWidget {
   const BrewScreen({Key? key}) : super(key: key);
@@ -177,74 +179,4 @@ class _MouseDragScrollBehavior extends MaterialScrollBehavior {
         PointerDeviceKind.touch,
         PointerDeviceKind.mouse,
       };
-}
-
-class BrewModel extends ChangeNotifier {
-  BrewModel(this._api, this._count) : assert(_count > 0);
-
-  final Api _api;
-  final int _count;
-  var _current = 0;
-  Timer? _timer;
-  late ValueChanged<int> _onSlide;
-  late VoidCallback _onSuccess;
-  late VoidCallback _onFailure;
-
-  int get slide => _current;
-
-  int setSlide(int current) {
-    if (_current == current) return _current;
-    _restartTimer();
-    _current = current % _count;
-    _onSlide.call(_current);
-    notifyListeners();
-    return _current;
-  }
-
-  void init({
-    required ValueChanged<int> onSlide,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-    _restartTimer();
-    _onSlide = onSlide;
-    _onSuccess = onSuccess;
-    _onFailure = onFailure;
-  }
-
-  bool get hasNext => _current < _count - 1;
-  int next() => setSlide(_current + 1);
-
-  bool get hasPrevious => _current > 0;
-  int previous() => setSlide(_current - 1);
-
-  void _restartTimer() {
-    _timer?.cancel();
-    if (_current <= _count - 1) {
-      _timer = Timer.periodic(kSlideDelay, (_) {
-        if (next() >= _count - 1) {
-          _timer?.cancel();
-        }
-      });
-    }
-  }
-
-  var _busy = false;
-  bool get isBusy => _busy;
-  void _setBusy(bool busy) {
-    if (_busy == busy) return;
-    _busy = busy;
-    notifyListeners();
-  }
-
-  Future<void> makeCoffee() async {
-    _setBusy(true);
-    final response = await _api.request();
-    if (response == true) {
-      _onSuccess();
-    } else {
-      _onFailure();
-    }
-    _setBusy(false);
-  }
 }

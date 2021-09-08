@@ -1,13 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../constants.dart';
 import '../routes.dart';
+import 'home_model.dart';
 
 const kLabels = ['FREE COFFEE', 'FREE SOFTWARE'];
-const kInterval = Duration(seconds: 2);
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -69,28 +66,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-}
-
-class HomeModel extends ChangeNotifier {
-  HomeModel(this._count);
-
-  int _index = 0;
-  final int _count;
-  late Timer _timer;
-
-  int get index => _index;
-
-  void next() {
-    _index = (_index + 1) % _count;
-    notifyListeners();
-  }
-
-  void init() => _timer = Timer.periodic(kInterval, (_) => next());
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
   }
 }
