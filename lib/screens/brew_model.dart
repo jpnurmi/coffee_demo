@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
-import '../api.dart';
+import '../service.dart';
 
 const kInterval = Duration(seconds: 5);
 
 class BrewModel extends ChangeNotifier {
-  BrewModel(this._api, this._count) : assert(_count > 0);
+  BrewModel(this._service, this._count) : assert(_count > 0);
 
-  final Api _api;
+  final Service _service;
   final int _count;
   var _current = 0;
   Timer? _timer;
@@ -66,7 +66,7 @@ class BrewModel extends ChangeNotifier {
 
   Future<void> makeCoffee() async {
     _setBusy(true);
-    final response = await _api.request();
+    final response = await _service.request();
     if (response == true) {
       _onSuccess();
     } else {

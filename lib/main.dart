@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'api.dart';
+import 'service.dart';
 import 'constants.dart';
 import 'routes.dart';
 import 'screens.dart';
 
 void main() async {
-  final api = Api();
-  await api.init();
-  runApp(Provider.value(value: api, child: const MyApp()));
+  final service = Service();
+  await service.init();
+  runApp(Provider.value(value: service, child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

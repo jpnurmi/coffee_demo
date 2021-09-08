@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 
-class Api {
+class Service {
   Dio? _dio;
   CancelToken? _token;
 

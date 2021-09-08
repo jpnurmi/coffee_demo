@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../api.dart';
+import '../service.dart';
 import '../constants.dart';
 import '../routes.dart';
 import 'brew_model.dart';
@@ -20,9 +20,9 @@ class BrewScreen extends StatefulWidget {
   const BrewScreen({Key? key}) : super(key: key);
 
   static Widget create(BuildContext context) {
-    final api = Provider.of<Api>(context, listen: false);
+    final service = Provider.of<Service>(context, listen: false);
     return ChangeNotifierProvider(
-      create: (_) => BrewModel(api, kSlides.length),
+      create: (_) => BrewModel(service, kSlides.length),
       child: const BrewScreen(),
     );
   }
