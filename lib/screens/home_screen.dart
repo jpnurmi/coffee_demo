@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../routes.dart';
+import 'package:wizard_router/wizard_router.dart';
 
 const kLabels = ['FREE COFFEE', 'FREE SOFTWARE'];
 const kInterval = Duration(seconds: 2);
@@ -34,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final model = Provider.of<HomeModel>(context);
     return Scaffold(
       body: InkWell(
-        onTap: () => Navigator.of(context).pushNamed(Routes.cloudProvider),
+        onTap: Wizard.of(context).next,
         child: Padding(
           padding: const EdgeInsets.all(48.0),
           child: Center(

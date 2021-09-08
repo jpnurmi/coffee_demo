@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wizard_router/wizard_router.dart';
 import 'package:yaru/yaru.dart' as yaru;
 
 import 'api.dart';
@@ -27,13 +28,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Coffee demo',
       theme: yaru.lightTheme,
-      initialRoute: Routes.home,
-      routes: const {
-        Routes.home: HomeScreen.create,
-        Routes.cloudProvider: CloudProviderPage.create,
-        Routes.slideShow: SlideShowPage.create,
-        Routes.brewCoffee: BrewCoffeePage.create,
-      },
+      home: const Wizard(
+        initialRoute: Routes.home,
+        routes: {
+          Routes.home: HomeScreen.create,
+          Routes.intro: IntroScreen.create,
+          Routes.cloudProvider: CloudProviderPage.create,
+          Routes.slideShow: SlideShowPage.create,
+          Routes.brewCoffee: BrewCoffeePage.create,
+        },
+      ),
     );
   }
 }
