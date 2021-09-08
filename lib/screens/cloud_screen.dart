@@ -11,9 +11,9 @@ class CloudProvider {
 }
 
 const kProviders = [
-  CloudProvider('k8s.svg', 'Private Cloud'),
-  CloudProvider('google.png'),
-  CloudProvider('azure.png', 'Public Cloud'),
+  CloudProvider('k8s.png', 'Private Cloud'),
+  CloudProvider('google.svg'),
+  CloudProvider('azure.svg', 'Public Cloud'),
   CloudProvider('aws.svg'),
 ];
 
