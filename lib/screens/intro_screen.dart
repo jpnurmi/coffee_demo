@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:wizard_router/wizard_router.dart';
 
+import '../constants.dart';
+
 class IntroScreen extends StatelessWidget {
   const IntroScreen({Key? key}) : super(key: key);
 
@@ -11,7 +13,7 @@ class IntroScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(48.0),
+        padding: const EdgeInsets.all(kPadding),
         child: Center(
           child: Column(
             children: <Widget>[
@@ -19,7 +21,7 @@ class IntroScreen extends StatelessWidget {
                 'A coffee machine running on Kubernetes?',
                 style: Theme.of(context).textTheme.headline4,
               ),
-              const SizedBox(height: 48),
+              const SizedBox(height: kPadding),
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -35,12 +37,12 @@ class IntroScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: kSpacing),
               OutlinedButton(
                 onPressed: Wizard.of(context).next,
                 child: const Text('NEXT >'),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: kSpacing),
               const Text(
                   'This demo was presented in the talk "Coffee Beyond and the Edge: A Hardware Engineer\'s Guide to Kubernetes" by Pedro Cruz and Alex Chalkias at the Kubernetes on Edge Day 2021.'),
             ],

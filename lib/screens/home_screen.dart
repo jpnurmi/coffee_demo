@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wizard_router/wizard_router.dart';
 
+import '../constants.dart';
+
 const kLabels = ['FREE COFFEE', 'FREE SOFTWARE'];
 const kInterval = Duration(seconds: 2);
 
@@ -48,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPrimary: Theme.of(context).highlightColor,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.all(kSpacing),
                     child: IndexedStack(
                       index: model.index,
                       children: kLabels
