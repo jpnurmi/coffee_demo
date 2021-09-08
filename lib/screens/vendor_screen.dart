@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
+import '../config.dart';
 import '../constants.dart';
 import '../routes.dart';
 import '../service.dart';
@@ -11,15 +12,17 @@ class CloudScreen extends StatelessWidget {
   const CloudScreen({Key? key}) : super(key: key);
 
   static Widget create(BuildContext context) {
+    final config = Provider.of<Config>(context, listen: false);
     final service = Provider.of<Service>(context, listen: false);
     return Provider(
-      create: (_) => VendorModel(service),
+      create: (_) => VendorModel(config, service),
       child: const CloudScreen(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final model = Provider.of<VendorModel>(context);
     return Scaffold(
       body: Column(
         children: <Widget>[
@@ -38,11 +41,11 @@ class CloudScreen extends StatelessWidget {
               children: <Widget>[
                 _VendorGrid(
                   title: 'Private Cloud',
-                  vendors: kVendors.where((vendor) => !vendor.public),
+                  vendors: model.privateVendors,
                 ),
                 _VendorGrid(
                   title: 'Public Cloud',
-                  vendors: kVendors.where((vendor) => vendor.public),
+                  vendors: model.publicVendors,
                 ),
               ],
             ),
@@ -87,7 +90,7 @@ class _VendorGrid extends StatelessWidget {
   }) : super(key: key);
 
   final String title;
-  final Iterable<Vendor> vendors;
+  final Iterable<String> vendors;
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +106,7 @@ class _VendorGrid extends StatelessWidget {
             crossAxisCount: 2,
             children: vendors.map((vendor) {
               return _VendorButton(
-                vendor: vendor.name,
+                vendor: vendor,
                 onPressed: () {
                   final model =
                       Provider.of<VendorModel>(context, listen: false);

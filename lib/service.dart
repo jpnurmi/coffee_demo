@@ -10,8 +10,6 @@ class Service {
 
   Dio get dio => _dio ??= Dio();
 
-  Future<void> init() async {}
-
   String get vendor => _vendor ??= '';
   void selectVendor(String vendor) => _vendor = vendor;
 
@@ -36,4 +34,18 @@ class Service {
   }
 
   Future<void> cancel() async => _token?.cancel();
+
+  Future<bool> healthCheck() async {
+    final response = await dio.get(
+      'http://<server-ip>:5000/',
+      queryParameters: <String, String>{
+        'vendor': vendor,
+        'requested_at': DateTime.now().toIso8601String(),
+        'msg_direction': 'from_kiosk',
+        'msg_type': 'health_check',
+      },
+      options: Options(responseType: ResponseType.json),
+    );
+    return response.data['status'] == 'ok';
+  }
 }

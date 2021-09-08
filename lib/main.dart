@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'service.dart';
+import 'config.dart';
 import 'constants.dart';
 import 'routes.dart';
 import 'screens.dart';
+import 'service.dart';
 
 void main() async {
-  final service = Service();
-  await service.init();
-  runApp(Provider.value(value: service, child: const MyApp()));
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final config = Config();
+  await config.init(await rootBundle.loadString('assets/config.yaml'));
+
+  runApp(MultiProvider(
+    providers: [
+      Provider.value(value: config),
+      Provider(create: (_) => Service()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

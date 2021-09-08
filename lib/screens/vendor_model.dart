@@ -1,23 +1,14 @@
+import '../config.dart';
 import '../service.dart';
 
-class Vendor {
-  const Vendor({required this.name, required this.public});
-  final String name;
-  final bool public;
-}
-
-const kVendors = [
-  Vendor(name: 'mk8', public: false),
-  Vendor(name: 'gcp', public: true),
-  Vendor(name: 'azu', public: true),
-  Vendor(name: 'aws', public: true),
-  Vendor(name: 'doc', public: true),
-];
-
 class VendorModel {
-  VendorModel(this._service);
+  VendorModel(this._config, this._service);
 
+  final Config _config;
   final Service _service;
 
-  void selectVendor(Vendor vendor) => _service.selectVendor(vendor.name);
+  Iterable<String> get privateVendors => _config.privateVendors;
+  Iterable<String> get publicVendors => _config.publicVendors;
+
+  void selectVendor(String vendor) => _service.selectVendor(vendor);
 }

@@ -1,0 +1,3 @@
+vendors:
+  private: [mk8]
+  public: [gcp, azu, aws, doc]
