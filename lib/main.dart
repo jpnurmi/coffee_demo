@@ -9,6 +9,7 @@ import 'brew_coffee.dart';
 import 'cloud_provider.dart';
 import 'constants.dart';
 import 'routes.dart';
+import 'screens.dart';
 import 'slide_show.dart';
 import 'transitions.dart';
 
@@ -23,34 +24,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).canvasColor,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          MaterialApp(
-            title: 'Coffee demo',
-            theme: yaru.lightTheme.copyWith(
-              pageTransitionsTheme: const PageTransitionsTheme(
-                builders: {
-                  TargetPlatform.linux: SlideTransitionsBuilder(),
-                },
-              ),
-            ),
-            initialRoute: '/',
-            routes: {
-              Routes.cloudProvider: CloudProviderPage.create,
-              Routes.slideShow: SlideShowPage.create,
-              Routes.brewCoffee: BrewCoffeePage.create,
-            },
-          ),
-          if (Platform.environment['DESKTOP_SESSION'] == 'LXDE-pi')
-            const MouseRegion(
-              opaque: false,
-              cursor: SystemMouseCursors.none,
-            ),
-        ],
-      ),
+    return MaterialApp(
+      title: 'Coffee demo',
+      theme: yaru.lightTheme,
+      initialRoute: Routes.home,
+      routes: const {
+        Routes.home: HomeScreen.create,
+        Routes.cloudProvider: CloudProviderPage.create,
+        Routes.slideShow: SlideShowPage.create,
+        Routes.brewCoffee: BrewCoffeePage.create,
+      },
     );
   }
 }
