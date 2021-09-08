@@ -19,7 +19,7 @@ class _ResultScreenState extends State<ResultScreen> {
     super.initState();
 
     Timer(const Duration(seconds: 5), () {
-      Navigator.of(context).pushReplacementNamed(kHomeScreenRoute);
+      Navigator.of(context).popUntil((route) => route.isFirst);
     });
   }
 
