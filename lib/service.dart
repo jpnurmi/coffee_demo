@@ -8,12 +8,14 @@ class Service {
 
   static BaseOptions makeOptions({
     required String url,
+    required String method,
     required String username,
     required String password,
   }) {
     final basicAuth = base64.encode(latin1.encode('$username:$password'));
     return BaseOptions(
       baseUrl: url,
+      method: method,
       headers: {HttpHeaders.authorizationHeader: 'Basic $basicAuth'},
     );
   }
@@ -53,7 +55,7 @@ class Service {
       'msg_direction': 'from_kiosk',
     });
     try {
-      final response = await _dio.post(
+      final response = await _dio.request(
         path,
         data: FormData.fromMap(formData),
         options: Options(responseType: ResponseType.json),
@@ -61,7 +63,7 @@ class Service {
       return response.data['status'] == 'ok';
     } on DioError catch (e) {
       _error = e.message;
-      return false;
     }
+    return false;
   }
 }

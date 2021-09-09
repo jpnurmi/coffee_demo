@@ -17,6 +17,7 @@ void main() async {
 
   final options = Service.makeOptions(
     url: config.url,
+    method: config.method,
     username: config.username,
     password: config.password,
   );
