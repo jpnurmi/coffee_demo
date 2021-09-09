@@ -1,0 +1,20 @@
+{
+  "health_check": {
+    "status": "ok",
+    "msg_direction": "from_machine",
+    "msg_origin": "machine_0",
+    "msg_type": "health_check_reply",
+    "sensor_data": {
+      "sensor_1": 0,
+      "sensor_2": 1,
+      "sensor_3": 0,
+      "sensor_4": 1
+    }
+  },
+  "coffee_order": {
+    "status": "ok",
+    "msg_direction": "from_machine",
+    "msg_origin": "machine_0",
+    "msg_type": "coffee_order_reply"
+  }
+}
