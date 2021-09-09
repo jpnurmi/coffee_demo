@@ -58,7 +58,7 @@ class Service {
         data: FormData.fromMap(formData),
         options: Options(method: 'GET', responseType: ResponseType.json),
       );
-      return response.data['status'] == 'ok';
+      return response.data['status'] == 'OK';
     } on DioError catch (e) {
       _error = e.message;
     }
