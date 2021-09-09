@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Coffee Demo
+Comment=Brew coffee
+Icon=${SNAP}/meta/gui/coffee-demo.png
+Exec=coffee-demo %U
+Terminal=false
+Type=Application
+Categories=Development;
+Keywords=Flutter;Development;SDK;
+StartupNotify=false

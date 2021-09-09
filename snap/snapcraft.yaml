@@ -2,23 +2,53 @@ name: coffee-demo
 version: git
 summary: Coffee Demo
 description: Brew coffee
+grade: stable
 confinement: strict
 base: core18
-grade: devel
+
 architectures:
   - build-on: arm64
-    run-on: [arm64]
+  - build-on: amd64
+
+slots:
+  # for GtkApplication registration
+  coffee-demo:
+    interface: dbus
+    bus: session
+    name: com.canonical.coffee-demo
+
+apps:
+  daemon:
+    daemon: simple
+    restart-condition: always
+    environment:
+      LC_ALL: en_UK.UTF-8
+      LIBGL_ALWAYS_SOFTWARE: 1
+    command-chain:
+      - bin/run-daemon
+      - bin/wayland-launch
+    command: bin/coffee_demo
+    extensions: [flutter-master]
+    plugs:
+      - opengl
+      - wayland
+      - network
+
+  coffee-demo:
+    command: bin/coffee_demo
+    extensions: [flutter-master]
+    plugs:
+      - opengl
+      - network
 
 parts:
   coffee-demo:
-    plugin: flutter
     source: .
-    flutter-target: lib/main.dart
-
+    plugin: flutter
   mir-kiosk-snap-launch:
     plugin: dump
     source: https://github.com/MirServer/mir-kiosk-snap-launch.git
-    override-build:  $SNAPCRAFT_PART_BUILD/build-with-plugs.sh opengl wayland
+    override-build:  $SNAPCRAFT_PART_BUILD/build-with-plugs.sh opengl wayland network
     stage-packages:
       - inotify-tools
 
@@ -30,28 +60,6 @@ parts:
     - fonts-freefont-ttf
     - fonts-ubuntu
 
-apps:
-  daemon:
-    daemon: simple
-    restart-condition: always
-    command-chain:
-      - bin/run-daemon
-      - bin/wayland-launch
-    command: bin/coffee_demo
-    extensions: [flutter-master]
-    plugs:
-    - opengl
-    - wayland
-
-  coffee-demo:
-    command-chain:
-      - bin/wayland-launch
-    command: coffee_demo
-    extensions: [flutter-master]
-    plugs:
-    - opengl
-    - wayland
-
 layout:
   /usr/share/fonts:
     bind: $SNAP/usr/share/fonts
@@ -59,5 +67,3 @@ layout:
     bind: $SNAP/etc/fonts
   /usr/share/icons:
     bind: $SNAP/usr/share/icons
-  /usr/share/coffee_demo:
-    bind: $SNAP/usr/share/coffee_demo
