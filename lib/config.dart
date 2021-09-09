@@ -2,7 +2,6 @@ import 'package:yaml/yaml.dart';
 
 class Config {
   late final String url;
-  late final String method;
   late final String username;
   late final String password;
   late final List<String> privateVendors;
@@ -11,7 +10,6 @@ class Config {
   Future<void> init(String config) async {
     final yaml = await loadYaml(config) as YamlMap;
     url = yaml['url'] as String;
-    method = (yaml['method'] as String?) ?? 'POST';
     username = yaml['username'] as String;
     password = yaml['password'] as String;
     privateVendors = yaml.vendors('private');

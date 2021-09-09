@@ -8,14 +8,12 @@ class Service {
 
   static BaseOptions makeOptions({
     required String url,
-    required String method,
     required String username,
     required String password,
   }) {
     final basicAuth = base64.encode(latin1.encode('$username:$password'));
     return BaseOptions(
       baseUrl: url,
-      method: method,
       headers: {HttpHeaders.authorizationHeader: 'Basic $basicAuth'},
     );
   }
@@ -58,7 +56,7 @@ class Service {
       final response = await _dio.request(
         path,
         data: FormData.fromMap(formData),
-        options: Options(responseType: ResponseType.json),
+        options: Options(method: 'GET', responseType: ResponseType.json),
       );
       return response.data['status'] == 'ok';
     } on DioError catch (e) {
