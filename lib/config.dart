@@ -11,7 +11,7 @@ class Config {
   Future<void> init(String config) async {
     final yaml = await loadYaml(config) as YamlMap;
     url = yaml['url'] as String;
-    method = yaml['method'] as String;
+    method = (yaml['method'] as String?) ?? 'POST';
     username = yaml['username'] as String;
     password = yaml['password'] as String;
     privateVendors = yaml.vendors('private');
