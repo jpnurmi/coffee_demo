@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
       routes: const {
         Routes.home: HomeScreen.create,
         Routes.intro: IntroScreen.create,
-        Routes.cloud: CloudScreen.create,
+        Routes.cloud: VendorScreen.create,
         Routes.coffee: CoffeeScreen.create,
         Routes.brew: BrewScreen.create,
         Routes.result: ResultScreen.create,

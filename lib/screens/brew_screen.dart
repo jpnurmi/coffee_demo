@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,6 +5,7 @@ import '../service.dart';
 import '../constants.dart';
 import '../routes.dart';
 import 'brew_model.dart';
+import 'brew_widgets.dart';
 
 const kSlides = <String>[
   'Swipe left to know more about the open source technologies we used to build this project.',
@@ -89,7 +89,7 @@ class _BrewScreenState extends State<BrewScreen> {
     final model = Provider.of<BrewModel>(context);
     return Scaffold(
       body: ScrollConfiguration(
-        behavior: _MouseDragScrollBehavior(),
+        behavior: MouseDragScrollBehavior(),
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -98,7 +98,7 @@ class _BrewScreenState extends State<BrewScreen> {
                 controller: _controller,
                 physics: const AlwaysScrollableScrollPhysics(),
                 onPageChanged: model.setSlide,
-                children: kSlides.map((label) => _Slide(label)).toList(),
+                children: kSlides.map((label) => BrewSlide(label)).toList(),
               ),
             ),
             if (model.isBusy)
@@ -149,29 +149,4 @@ class _BrewScreenState extends State<BrewScreen> {
       ),
     );
   }
-}
-
-class _Slide extends StatelessWidget {
-  const _Slide(this.label, {Key? key}) : super(key: key);
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        label,
-        style: Theme.of(context).textTheme.headline5,
-      ),
-    );
-  }
-}
-
-// https://flutter.dev/docs/release/breaking-changes/default-scroll-behavior-drag#setting-a-custom-scrollbehavior-for-your-application
-class _MouseDragScrollBehavior extends MaterialScrollBehavior {
-  @override
-  Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-      };
 }

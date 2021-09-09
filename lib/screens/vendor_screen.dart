@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../config.dart';
@@ -7,17 +6,24 @@ import '../constants.dart';
 import '../routes.dart';
 import '../service.dart';
 import 'vendor_model.dart';
+import 'vendor_widgets.dart';
 
-class CloudScreen extends StatelessWidget {
-  const CloudScreen({Key? key}) : super(key: key);
+class VendorScreen extends StatelessWidget {
+  const VendorScreen({Key? key}) : super(key: key);
 
   static Widget create(BuildContext context) {
     final config = Provider.of<Config>(context, listen: false);
     final service = Provider.of<Service>(context, listen: false);
     return Provider(
       create: (_) => VendorModel(config, service),
-      child: const CloudScreen(),
+      child: const VendorScreen(),
     );
+  }
+
+  void _selectVendor(BuildContext context, String vendor) {
+    final model = Provider.of<VendorModel>(context, listen: false);
+    model.selectVendor(vendor);
+    Navigator.of(context).pushNamed(Routes.coffee);
   }
 
   @override
@@ -39,13 +45,15 @@ class CloudScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _VendorGrid(
+                VendorGrid(
                   title: 'Private Cloud',
                   vendors: model.privateVendors,
+                  onPressed: (vendor) => _selectVendor(context, vendor),
                 ),
-                _VendorGrid(
+                VendorGrid(
                   title: 'Public Cloud',
                   vendors: model.publicVendors,
+                  onPressed: (vendor) => _selectVendor(context, vendor),
                 ),
               ],
             ),
@@ -53,71 +61,6 @@ class CloudScreen extends StatelessWidget {
           const SizedBox(height: kSpacing),
         ],
       ),
-    );
-  }
-}
-
-class _VendorButton extends StatelessWidget {
-  const _VendorButton({
-    Key? key,
-    required this.vendor,
-    required this.onPressed,
-  }) : super(key: key);
-
-  final String vendor;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(kSpacing),
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: ElevatedButton(
-          onPressed: onPressed,
-          child: SvgPicture.asset('assets/$vendor.svg', fit: BoxFit.contain),
-        ),
-      ),
-    );
-  }
-}
-
-class _VendorGrid extends StatelessWidget {
-  const _VendorGrid({
-    Key? key,
-    required this.title,
-    required this.vendors,
-  }) : super(key: key);
-
-  final String title;
-  final Iterable<String> vendors;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text(title),
-        const SizedBox(height: kSpacing / 2),
-        Expanded(
-          child: GridView.count(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            crossAxisCount: 2,
-            children: vendors.map((vendor) {
-              return _VendorButton(
-                vendor: vendor,
-                onPressed: () {
-                  final model =
-                      Provider.of<VendorModel>(context, listen: false);
-                  model.selectVendor(vendor);
-                  Navigator.of(context).pushNamed(Routes.coffee);
-                },
-              );
-            }).toList(),
-          ),
-        ),
-      ],
     );
   }
 }
