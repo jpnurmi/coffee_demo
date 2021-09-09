@@ -47,9 +47,17 @@ class _CoffeeScreenState extends State<CoffeeScreen> {
     model.init(
       onSuccess: () => Navigator.of(context).pushNamed(Routes.brew),
       onFailure: (error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error)),
+        final snackbar = SnackBar(
+          content: Text(error),
+          duration: const Duration(seconds: 5),
+          action: SnackBarAction(
+            label: 'Return home',
+            onPressed: () {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            },
+          ),
         );
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
       },
     );
   }
