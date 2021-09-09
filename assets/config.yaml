@@ -1,4 +1,6 @@
-url: http://12.34.56.78:5000
+url: 'http://12.34.56.78:5000'
+username: 'foo'
+password: 'bar'
 vendors:
   private: [mk8]
   public: [gcp, azu, aws, doc]

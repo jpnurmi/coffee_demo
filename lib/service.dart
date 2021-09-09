@@ -1,15 +1,27 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 class Service {
-  Service(this.serverAddress);
+  Service(this._dio);
 
-  Dio? _dio;
+  static BaseOptions makeOptions({
+    required String url,
+    required String username,
+    required String password,
+  }) {
+    final basicAuth = base64.encode(latin1.encode('$username:$password'));
+    return BaseOptions(
+      baseUrl: url,
+      headers: {HttpHeaders.authorizationHeader: 'Basic $basicAuth'},
+    );
+  }
+
+  final Dio _dio;
   String? _vendor;
   String? _coffee;
   String? _error;
-  final String serverAddress;
-
-  Dio get dio => _dio ??= Dio();
 
   String get vendor => _vendor ??= '';
   void selectVendor(String vendor) => _vendor = vendor;
@@ -36,8 +48,8 @@ class Service {
 
   Future<bool> _post(String path, Map<String, dynamic> formData) async {
     try {
-      final response = await dio.post(
-        '$serverAddress/$path',
+      final response = await _dio.post(
+        path,
         data: FormData.fromMap(formData
           ..addAll({
             'vendor': vendor,
