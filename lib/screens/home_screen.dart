@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../constants.dart';
 import '../routes.dart';
 import 'home_model.dart';
 
@@ -34,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: InkWell(
         onTap: () => Navigator.of(context).pushNamed(Routes.intro),
         child: Padding(
-          padding: const EdgeInsets.all(48.0),
+          padding: const EdgeInsets.all(kPadding),
           child: Center(
             child: Column(
               children: <Widget>[
