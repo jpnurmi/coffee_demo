@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 import '../constants.dart';
 
@@ -19,7 +20,7 @@ class _ResultScreenState extends State<ResultScreen> {
     super.initState();
 
     Timer(const Duration(seconds: 5), () {
-      Navigator.of(context).popUntil((route) => route.isFirst);
+      //Navigator.of(context).popUntil((route) => route.isFirst);
     });
   }
 
@@ -35,9 +36,10 @@ class _ResultScreenState extends State<ResultScreen> {
               style: Theme.of(context).textTheme.headline4,
             ),
             const SizedBox(height: kSpacing * 3),
-            Text(
-              'jusu.is/brew',
-              style: Theme.of(context).textTheme.headline4,
+            Html(
+              data: '<a>juju.is/brew</a>',
+              style: {'body': Style(fontSize: FontSize.larger)},
+              shrinkWrap: true,
             ),
           ],
         ),

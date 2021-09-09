@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'config.dart';
-import 'constants.dart';
 import 'routes.dart';
 import 'screens.dart';
 import 'service.dart';
+import 'theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,16 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Coffee demo',
-      theme: ThemeData.light().copyWith(
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.white,
-            onPrimary: Colors.black87,
-            padding: const EdgeInsets.all(kSpacing),
-            minimumSize: const Size(192, 48),
-          ),
-        ),
-      ),
+      theme: theme,
       initialRoute: Routes.home,
       routes: const {
         Routes.home: HomeScreen.create,

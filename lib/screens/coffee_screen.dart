@@ -71,6 +71,7 @@ class _CoffeeScreenState extends State<CoffeeScreen> {
                   style: Theme.of(context).textTheme.headline4,
                 ),
               ),
+              const SizedBox(height: kSpacing),
               Row(
                 children: <Widget>[
                   const Text('I am a'),

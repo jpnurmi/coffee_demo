@@ -21,7 +21,6 @@ class VendorGrid extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Text(title),
-        const SizedBox(height: kSpacing / 2),
         Expanded(
           child: GridView.count(
             shrinkWrap: true,

@@ -31,6 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<HomeModel>(context);
+    final buttonTheme = Theme.of(context).textTheme.button!;
+    final buttonStyle = buttonTheme.copyWith(fontSize: 96);
     return Scaffold(
       body: InkWell(
         onTap: () => Navigator.of(context).pushNamed(Routes.intro),
@@ -46,11 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: IndexedStack(
                     index: model.index,
                     children: kLabels
-                        .map((label) => Text(label,
-                            style: Theme.of(context).textTheme.button!.copyWith(
-                                  fontSize: 96,
-                                  fontWeight: FontWeight.w400,
-                                )))
+                        .map((label) => Text(label, style: buttonStyle))
                         .toList(),
                   ),
                 ),
@@ -60,7 +58,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: Theme.of(context).textTheme.headline4,
                 ),
                 const Spacer(flex: 3),
-                const Text('Powered by Canonical and Open Source.'),
+                Text(
+                  'Powered by Canonical and Open Source.',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
               ],
             ),
           ),

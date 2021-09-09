@@ -38,7 +38,10 @@ class VendorScreen extends StatelessWidget {
             style: Theme.of(context).textTheme.headline4,
           ),
           const SizedBox(height: kSpacing),
-          const Text('Where do you want your apps stack to run?'),
+          Text(
+            'Where do you want your apps stack to run?',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
           const SizedBox(height: kPadding),
           Expanded(
             child: Row(
@@ -50,6 +53,7 @@ class VendorScreen extends StatelessWidget {
                   vendors: model.privateVendors,
                   onPressed: (vendor) => _selectVendor(context, vendor),
                 ),
+                const SizedBox(width: kSpacing * 2),
                 VendorGrid(
                   title: 'Public Cloud',
                   vendors: model.publicVendors,
