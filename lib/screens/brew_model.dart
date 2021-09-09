@@ -6,6 +6,13 @@ import '../service.dart';
 
 const kInterval = Duration(seconds: 5);
 
+enum BrewState {
+  initializing,
+  ready,
+  brewing,
+  error,
+}
+
 class BrewModel extends ChangeNotifier {
   BrewModel(this._service, this._count) : assert(_count > 0);
 
@@ -15,7 +22,7 @@ class BrewModel extends ChangeNotifier {
   Timer? _timer;
   late ValueChanged<int> _onSlide;
   late VoidCallback _onSuccess;
-  late VoidCallback _onFailure;
+  late ValueChanged<String> _onFailure;
 
   int get slide => _current;
 
@@ -28,15 +35,32 @@ class BrewModel extends ChangeNotifier {
     return _current;
   }
 
-  void init({
+  var _state = BrewState.initializing;
+  BrewState get state => _state;
+  void _setState(BrewState state) {
+    if (_state == state) return;
+    _state = state;
+    notifyListeners();
+  }
+
+  Future<void> init({
     required ValueChanged<int> onSlide,
     required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
+    required ValueChanged<String> onFailure,
+  }) async {
     _restartTimer();
     _onSlide = onSlide;
     _onSuccess = onSuccess;
     _onFailure = onFailure;
+
+    _setState(BrewState.initializing);
+    final ok = await _service.healthCheck();
+    if (ok) {
+      _setState(BrewState.ready);
+    } else {
+      _setState(BrewState.error);
+      onFailure(_service.error);
+    }
   }
 
   bool get hasNext => _current < _count - 1;
@@ -56,24 +80,14 @@ class BrewModel extends ChangeNotifier {
     }
   }
 
-  var _busy = false;
-  bool get isBusy => _busy;
-  void _setBusy(bool busy) {
-    if (_busy == busy) return;
-    _busy = busy;
-    notifyListeners();
-  }
-
-  String get error => _service.error ?? 'Unknown error';
-
   Future<void> makeCoffee() async {
-    _setBusy(true);
+    _setState(BrewState.brewing);
     final ok = await _service.makeCoffee();
     if (ok) {
       _onSuccess();
     } else {
-      _onFailure();
+      _onFailure(_service.error);
     }
-    _setBusy(false);
+    _setState(BrewState.ready);
   }
 }

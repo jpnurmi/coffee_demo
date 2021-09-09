@@ -36,15 +36,15 @@ class CoffeeModel extends ChangeNotifier {
   final ValueNotifier<String> _user;
   final ValueNotifier<Coffee> _coffee;
   late final VoidCallback _onSuccess;
-  late final VoidCallback _onFailure;
+  late final ValueChanged<String> _onFailure;
   var _busy = false;
 
   void init({
-    required VoidCallback onFailure,
     required VoidCallback onSuccess,
+    required ValueChanged<String> onFailure,
   }) {
-    _onFailure = onFailure;
     _onSuccess = onSuccess;
+    _onFailure = onFailure;
   }
 
   String get user => _user.value;
@@ -60,8 +60,6 @@ class CoffeeModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  String get error => _service.error ?? 'Unknown error';
-
   Future<void> selectCoffee() async {
     _setBusy(true);
     final ok = await _service.healthCheck();
@@ -69,7 +67,7 @@ class CoffeeModel extends ChangeNotifier {
       _service.selectCoffee(coffee.type);
       _onSuccess();
     } else {
-      _onFailure();
+      _onFailure(_service.error);
     }
     _setBusy(false);
   }

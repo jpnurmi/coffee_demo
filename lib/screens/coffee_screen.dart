@@ -46,13 +46,11 @@ class _CoffeeScreenState extends State<CoffeeScreen> {
     final model = Provider.of<CoffeeModel>(context, listen: false);
     model.init(
       onSuccess: () => Navigator.of(context).pushNamed(Routes.brew),
-      onFailure: () => _showError(model.error),
-    );
-  }
-
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      onFailure: (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error)),
+        );
+      },
     );
   }
 

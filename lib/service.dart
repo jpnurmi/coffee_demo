@@ -31,7 +31,7 @@ class Service {
   String get coffee => _coffee ?? '';
   void selectCoffee(String coffee) => _coffee = coffee;
 
-  String? get error => _error;
+  String get error => _error ?? 'Unknown error';
 
   Future<bool> healthCheck() async {
     return _post('/health_check', {'msg_type': 'health_check'});

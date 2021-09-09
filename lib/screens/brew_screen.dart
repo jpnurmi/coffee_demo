@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,29 +34,29 @@ class BrewScreen extends StatefulWidget {
 }
 
 class _BrewScreenState extends State<BrewScreen> {
-  PageController? _controller;
+  var _controller = PageController();
 
   @override
   void initState() {
     super.initState();
 
     final model = Provider.of<BrewModel>(context, listen: false);
-    model.init(
-      onSlide: _animateTo,
-      onSuccess: () => Navigator.of(context).pushNamed(Routes.result),
-      onFailure: () => _showError(model.error),
-    );
-  }
-
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    scheduleMicrotask(() {
+      model.init(
+        onSlide: _animateTo,
+        onSuccess: () => Navigator.of(context).pushNamed(Routes.result),
+        onFailure: (error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(error)),
+          );
+        },
+      );
+    });
   }
 
   @override
   void didChangeDependencies() {
-    _controller?.dispose();
+    _controller.dispose();
     final model = Provider.of<BrewModel>(context, listen: false);
     _controller = PageController(initialPage: model.slide);
     super.didChangeDependencies();
@@ -62,12 +64,12 @@ class _BrewScreenState extends State<BrewScreen> {
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   void _animateTo(int page) {
-    _controller!.animateToPage(
+    _controller.animateToPage(
       page,
       curve: kSlideCurve,
       duration: kSlideAnimation,
@@ -101,7 +103,7 @@ class _BrewScreenState extends State<BrewScreen> {
                 children: kSlides.map((label) => BrewSlide(label)).toList(),
               ),
             ),
-            if (model.isBusy)
+            if (model.state == BrewState.initializing)
               const Positioned(
                 top: kPadding,
                 right: kPadding * 4,
@@ -133,14 +135,21 @@ class _BrewScreenState extends State<BrewScreen> {
               child: Column(
                 children: <Widget>[
                   Text(
-                    'We are brewing your infrastructure',
+                    model.state == BrewState.initializing
+                        ? 'We are brewing your infrastructure'
+                        : 'Infrastructure deployed and ready',
                     style: Theme.of(context).textTheme.headline4,
                   ),
                   const Spacer(),
-                  ElevatedButton(
-                    onPressed: model.isBusy ? null : model.makeCoffee,
-                    child: const Text('Make coffee!'),
-                  ),
+                  if (model.state == BrewState.brewing)
+                    const CircularProgressIndicator(),
+                  if (model.state != BrewState.brewing)
+                    ElevatedButton(
+                      onPressed: model.state == BrewState.ready
+                          ? model.makeCoffee
+                          : null,
+                      child: const Text('Make coffee!'),
+                    ),
                 ],
               ),
             ),
