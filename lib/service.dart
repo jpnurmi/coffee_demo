@@ -47,15 +47,15 @@ class Service {
   }
 
   Future<bool> _post(String path, Map<String, dynamic> formData) async {
+    formData.addAll({
+      'vendor': vendor,
+      'requested_at': DateTime.now().toIso8601String(),
+      'msg_direction': 'from_kiosk',
+    });
     try {
       final response = await _dio.post(
         path,
-        data: FormData.fromMap(formData
-          ..addAll({
-            'vendor': vendor,
-            'requested_at': DateTime.now().toIso8601String(),
-            'msg_direction': 'from_kiosk',
-          })),
+        data: FormData.fromMap(formData),
         options: Options(responseType: ResponseType.json),
       );
       return response.data['status'] == 'ok';
